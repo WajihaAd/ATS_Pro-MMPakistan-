@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Evaluate · {{ app_name }}{% endblock %}
+{% block page_title %}Evaluate Candidates{% endblock %}
+{% block page_subtitle %}Run every staged resume against the active job description.{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">{% endblock %}
+
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-5">
+    <div class="section-card" data-aos="fade-up">
+      <h5>Run Summary</h5>
+      <div class="row g-3 mt-1">
+        <div class="col-6">
+          <div class="text-muted-ats" style="font-size:0.78rem;">Active JD</div>
+          <div class="fw-bold" id="evalJdTitle">—</div>
+        </div>
+        <div class="col-6">
+          <div class="text-muted-ats" style="font-size:0.78rem;">Resumes staged</div>
+          <div class="fw-bold" id="evalResumeCount">0</div>
+        </div>
+      </div>
+
+      <hr class="hr-ats my-3">
+
+      <button class="btn btn-ats-primary w-100" id="evaluateBtn" onclick="runEvaluation()">
+        <i class="fa-solid fa-bolt me-1"></i> Evaluate Candidates
+      </button>
+
+      <div class="mt-3" id="evalOverallProgressWrap" style="display:none;">
+        <div class="ats-progress mb-2"><div class="ats-progress-bar" id="evalOverallBar" style="width:0%"></div></div>
+        <div class="text-muted-ats" id="evalOverallText" style="font-size:0.8rem;"></div>
+      </div>
+    </div>
+
+    <div class="section-card" data-aos="fade-up">
+      <h5>Pipeline Steps</h5>
+      <div id="stepList">
+        <div class="step-item" data-step="extract"><span class="step-dot"><i class="fa-solid fa-circle" style="font-size:6px;"></i></span> Extracting resumes…</div>
+        <div class="step-item" data-step="read"><span class="step-dot"><i class="fa-solid fa-circle" style="font-size:6px;"></i></span> Reading job description…</div>
+        <div class="step-item" data-step="compare"><span class="step-dot"><i class="fa-solid fa-circle" style="font-size:6px;"></i></span> Comparing resumes…</div>
+        <div class="step-item" data-step="ai"><span class="step-dot"><i class="fa-solid fa-circle" style="font-size:6px;"></i></span> Running AI evaluation…</div>
+        <div class="step-item" data-step="ats"><span class="step-dot"><i class="fa-solid fa-circle" style="font-size:6px;"></i></span> Calculating ATS scores…</div>
+        <div class="step-item" data-step="rank"><span class="step-dot"><i class="fa-solid fa-circle" style="font-size:6px;"></i></span> Ranking candidates…</div>
+        <div class="step-item" data-step="save"><span class="step-dot"><i class="fa-solid fa-circle" style="font-size:6px;"></i></span> Saving to database…</div>
+        <div class="step-item" data-step="done"><span class="step-dot"><i class="fa-solid fa-circle" style="font-size:6px;"></i></span> Completed successfully.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="section-card" data-aos="fade-up">
+      <h5>Live Status</h5>
+      <p class="section-sub">Each resume is compared against the JD one at a time.</p>
+      <div id="evalLog"><div class="empty-state py-4"><i class="fa-solid fa-hourglass-half"></i>Waiting to start…</div></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/app-state.js') }}"></script>
+<script src="{{ url_for('static', filename='js/evaluate.js') }}"></script>
+{% endblock %}

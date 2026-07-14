@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Settings · {{ app_name }}{% endblock %}
+{% block page_title %}Settings{% endblock %}
+{% block page_subtitle %}Environment and pipeline configuration status.{% endblock %}
+
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-key me-1 text-muted-ats"></i> API & Database</h5>
+      <div class="settings-row">
+        <span>Gemini API key</span>
+        {% if config_status.gemini_api_key_set %}
+          <span class="pill pill-green"><i class="fa-solid fa-check me-1"></i>Configured</span>
+        {% else %}
+          <span class="pill pill-red"><i class="fa-solid fa-xmark me-1"></i>Missing</span>
+        {% endif %}
+      </div>
+      <div class="settings-row">
+        <span>PostgreSQL password</span>
+        {% if config_status.db_password_set %}
+          <span class="pill pill-green"><i class="fa-solid fa-check me-1"></i>Configured</span>
+        {% else %}
+          <span class="pill pill-red"><i class="fa-solid fa-xmark me-1"></i>Missing</span>
+        {% endif %}
+      </div>
+      <p class="text-muted-ats mt-3" style="font-size:0.82rem;">
+        Set <code>GEMINI_API_KEY</code> and <code>DB_PASSWORD</code> in your <code>.env</code> file
+        (see <code>.env.example</code>). Restart the app after changing them.
+      </p>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-file-shield me-1 text-muted-ats"></i> Upload Limits</h5>
+      <div class="settings-row">
+        <span>Max upload size</span>
+        <span class="pill pill-blue">{{ config_status.max_upload_mb }} MB</span>
+      </div>
+      <div class="settings-row">
+        <span>Allowed resume types</span>
+        <span>
+          {% for t in config_status.allowed_resume_types %}<span class="pill pill-muted">.{{ t }}</span>{% endfor %}
+        </span>
+      </div>
+      <div class="settings-row">
+        <span>Allowed JD file types</span>
+        <span>
+          {% for t in config_status.allowed_jd_types %}<span class="pill pill-muted">.{{ t }}</span>{% endfor %}
+        </span>
+      </div>
+    </div>
+
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-diagram-project me-1 text-muted-ats"></i> Pipeline Modules</h5>
+      <p class="section-sub mb-2">Unmodified business-logic modules powering this app.</p>
+      <ul class="text-muted-ats" style="font-size:0.84rem; padding-left:18px;">
+        <li>core/resume_extractor_gemini.py</li>
+        <li>core/job_description_parser.py</li>
+        <li>core/compare_resume_and_jd.py</li>
+        <li>core/ats_score_calculator.py</li>
+        <li>core/ranking.py</li>
+        <li>core/exporter.py</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.settings-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 11px 0; border-bottom: 1px solid var(--border-soft);
+  font-size: 0.88rem;
+}
+.settings-row:last-of-type { border-bottom: none; }
+</style>
+{% endblock %}

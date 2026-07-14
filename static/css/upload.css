@@ -1,0 +1,33 @@
+.ats-textarea {
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  resize: vertical;
+}
+.ats-textarea:focus {
+  background: var(--bg-card-alt);
+  color: var(--text);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(94, 200, 248, 0.12);
+}
+
+.jd-list-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 12px;
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  transition: all 0.15s ease;
+}
+.jd-list-item:hover { border-color: var(--accent); }
+.jd-list-item .jd-item-title { font-weight: 700; font-size: 0.87rem; }
+.jd-list-item .jd-item-meta { color: var(--text-dim); font-size: 0.74rem; }
+
+.upload-summary-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;
+  margin-right: 8px;
+}

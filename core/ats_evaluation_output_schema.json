@@ -1,0 +1,179 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ATSEvaluationOutputV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "skill_match",
+    "experience_analysis",
+    "education_analysis",
+    "certification_analysis",
+    "project_analysis",
+    "responsibility_alignment",
+    "category_scores_for_ats",
+    "risk_analysis",
+    "strength_analysis",
+    "weakness_analysis",
+    "interview_intelligence",
+    "hiring_recommendation",
+    "ranking_summary"
+  ],
+  "properties": {
+    "skill_match": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["matched_skills", "missing_skills", "partial_skills", "keyword_matches"],
+      "properties": {
+        "matched_skills": { "type": "array", "items": { "type": "string" } },
+        "missing_skills": { "type": "array", "items": { "type": "string" } },
+        "partial_skills": { "type": "array", "items": { "type": "string" } },
+        "keyword_matches": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "experience_analysis": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "required_experience_years", "candidate_experience_years", "experience_gap_years",
+        "experience_score", "experience_relevance_score", "job_role_similarity_score",
+        "industry_similarity_score"
+      ],
+      "properties": {
+        "required_experience_years": { "type": "number", "minimum": 0 },
+        "candidate_experience_years": { "type": "number", "minimum": 0 },
+        "experience_gap_years": { "type": "number" },
+        "experience_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "experience_relevance_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "job_role_similarity_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "industry_similarity_score": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+
+    "education_analysis": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["degree_match", "major_match", "education_score", "education_reasoning"],
+      "properties": {
+        "degree_match": { "type": "boolean" },
+        "major_match": { "type": "boolean" },
+        "education_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "education_reasoning": { "type": "string" }
+      }
+    },
+
+    "certification_analysis": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["matched_certifications", "missing_certifications", "certification_score"],
+      "properties": {
+        "matched_certifications": { "type": "array", "items": { "type": "string" } },
+        "missing_certifications": { "type": "array", "items": { "type": "string" } },
+        "certification_score": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+
+    "project_analysis": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["project_relevance_score", "project_complexity_score", "project_scale_score", "most_relevant_projects"],
+      "properties": {
+        "project_relevance_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "project_complexity_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "project_scale_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "most_relevant_projects": { "type": "array", "items": { "type": "string" }, "maxItems": 5 }
+      }
+    },
+
+    "responsibility_alignment": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["responsibility_match_percentage", "matched_responsibilities", "missing_responsibilities"],
+      "properties": {
+        "responsibility_match_percentage": { "type": "number", "minimum": 0, "maximum": 100 },
+        "matched_responsibilities": { "type": "array", "items": { "type": "string" } },
+        "missing_responsibilities": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "category_scores_for_ats": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "skills_score", "experience_score", "education_score", "certification_score",
+        "project_score", "responsibility_score", "keyword_score", "leadership_score",
+        "communication_score", "domain_score"
+      ],
+      "properties": {
+        "skills_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "experience_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "education_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "certification_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "project_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "responsibility_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "keyword_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "leadership_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "communication_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "domain_score": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+
+    "risk_analysis": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["risk_flags"],
+      "properties": {
+        "risk_flags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "insufficient_experience", "missing_core_skills", "degree_mismatch",
+              "major_mismatch", "certification_gap", "employment_gap",
+              "excessive_job_hopping", "overqualification", "underqualification"
+            ]
+          }
+        }
+      }
+    },
+
+    "strength_analysis": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["top_strengths"],
+      "properties": {
+        "top_strengths": { "type": "array", "items": { "type": "string" }, "maxItems": 3 }
+      }
+    },
+
+    "weakness_analysis": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["top_weaknesses"],
+      "properties": {
+        "top_weaknesses": { "type": "array", "items": { "type": "string" }, "maxItems": 3 }
+      }
+    },
+
+    "interview_intelligence": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["interview_focus_points"],
+      "properties": {
+        "interview_focus_points": { "type": "array", "items": { "type": "string" }, "maxItems": 6 }
+      }
+    },
+
+    "hiring_recommendation": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["recommendation", "reasoning"],
+      "properties": {
+        "recommendation": { "type": "string", "enum": ["Strong Hire", "Hire", "Maybe", "No Hire"] },
+        "reasoning": { "type": "string" }
+      }
+    },
+
+    "ranking_summary": { "type": "string" }
+  }
+}

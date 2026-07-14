@@ -1,0 +1,162 @@
+/* .candidate-avatar-lg {
+  width: 84px; height: 84px; border-radius: 22px;
+  background: var(--accent-gradient); color: #0b0f17;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 2rem;
+}
+.score-ring-wrap {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 15px;
+}
+
+.score-ring-wrap canvas {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.score-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.score-ring-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.score-ring-label-sm {
+  margin-top: 5px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.risk-flag-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: var(--danger-bg);
+  color: #f08a8a;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+.section-card {
+  margin-bottom: 1rem;
+}
+.section-card {
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+#categoryRadar {
+    max-height: 260px;
+} */
+.candidate-avatar-lg {
+  width: 84px;
+  height: 84px;
+  border-radius: 22px;
+  background: var(--accent-gradient);
+  color: #0b0f17;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 2rem;
+}
+
+
+/* =========================
+   ATS SCORE RING
+========================= */
+
+.score-ring-wrap {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 15px;
+}
+
+.score-ring-wrap canvas {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.score-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.score-ring-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.score-ring-label-sm {
+  margin-top: 5px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+
+/* =========================
+   RISK FLAGS
+========================= */
+
+.risk-flag-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: var(--danger-bg);
+  color: #f08a8a;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+
+/* =========================
+   SECTION CARDS
+========================= */
+
+.section-card {
+  width: 100%;
+  margin-bottom: 1rem;
+  height: auto;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+#newrow{
+  margin-bottom: 17px;
+}
+
+#newbox{
+  margin-top: 17px;
+}
+
+/* =========================
+   RADAR CHART
+========================= */
+
+#categoryRadar {
+  max-height: 260px;
+}

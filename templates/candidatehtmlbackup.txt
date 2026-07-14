@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% block page_title %}Candidate Profile{% endblock %}
+{% block title %}{{ profile.name }} · {{ app_name }}{% endblock %}
+{% block page_subtitle %}Full ATS breakdown, ranking rationale, and resume details.{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/candidate.css') }}">{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+  <a href="{{ url_for('ranking.ranking_page') }}{% if jd_id %}?jd_id={{ jd_id }}{% endif %}" class="btn btn-ats-ghost btn-sm">
+    <i class="fa-solid fa-arrow-left me-1"></i> Back to Ranking
+  </a>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="section-card text-center" data-aos="fade-up">
+      <div class="candidate-avatar-lg mx-auto mb-3" id="candAvatar">{{ profile.name[:1]|upper if profile.name else "?" }}</div>
+      <h4 class="mb-0" id="candName">{{ profile.name }}</h4>
+      <p class="text-muted-ats mb-3" id="candEmail">{{ profile.email }}</p>
+
+      <div class="d-flex justify-content-center gap-2 mb-3" id="candContactPills">
+        {% if profile.phone %}<span class="pill pill-muted"><i class="fa-solid fa-phone me-1"></i>{{ profile.phone }}</span>{% endif %}
+        {% if profile.location %}<span class="pill pill-muted"><i class="fa-solid fa-location-dot me-1"></i>{{ profile.location }}</span>{% endif %}
+      </div>
+
+      <div class="score-ring-wrap mx-auto mb-2">
+        <canvas id="scoreRing" width="140" height="140"></canvas>
+        <div class="score-ring-center">
+          <div class="score-ring-value" id="ringScoreValue">—</div>
+          <div class="score-ring-label-sm">ATS Score</div>
+        </div>
+      </div>
+
+      <div id="candBandPill"></div>
+    </div>
+
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-graduation-cap me-1 text-muted-ats"></i> Education</h5>
+      <div class="text-muted-ats" style="font-size:0.85rem;">
+        <div class="mb-1"><strong>{{ profile.degree or "—" }}</strong>{% if profile.major %} in {{ profile.major }}{% endif %}</div>
+        <div>{{ profile.university or "—" }}{% if profile.graduation_year %} · {{ profile.graduation_year }}{% endif %}</div>
+        {% if profile.cgpa %}<div>CGPA: {{ profile.cgpa }}</div>{% endif %}
+      </div>
+      <h5 class="mt-3"><i class="fa-solid fa-briefcase me-1 text-muted-ats"></i> Experience</h5>
+      <div class="text-muted-ats" style="font-size:0.85rem;">{{ profile.experience_years or 0 }} years total</div>
+    </div>
+
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-screwdriver-wrench me-1 text-muted-ats"></i> Skills</h5>
+      <div>
+        {% for s in profile.skills %}<span class="skill-pill-match">{{ s }}</span>{% else %}<span class="text-muted-ats">None recorded</span>{% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-chart-simple me-1 text-muted-ats"></i> ATS Category Breakdown</h5>
+      <canvas id="categoryRadar" height="220"></canvas>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="section-card h-100" data-aos="fade-up">
+          <h5><i class="fa-solid fa-check text-success me-1"></i> Matched Skills</h5>
+          <div id="matchedSkillsBox"><span class="text-muted-ats">Load a ranking result to see match details.</span></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="section-card h-100" data-aos="fade-up">
+          <h5><i class="fa-solid fa-xmark text-danger me-1"></i> Missing Skills</h5>
+          <div id="missingSkillsBox"><span class="text-muted-ats">Load a ranking result to see gap details.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-shield-halved me-1 text-muted-ats"></i> Risk Breakdown</h5>
+      <div id="riskBox"><span class="text-muted-ats">No risk flags on record.</span></div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="section-card h-100" data-aos="fade-up">
+          <h5><i class="fa-solid fa-thumbs-up text-success me-1"></i> Top Strengths</h5>
+          <ul id="strengthsList" class="text-muted-ats" style="font-size:0.87rem; padding-left:18px;"></ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="section-card h-100" data-aos="fade-up">
+          <h5><i class="fa-solid fa-triangle-exclamation text-warning me-1"></i> Top Weaknesses</h5>
+          <ul id="weaknessesList" class="text-muted-ats" style="font-size:0.87rem; padding-left:18px;"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-robot me-1 text-muted-ats"></i> AI Explanation & Hire Recommendation</h5>
+      <div id="llmExplanationBox" class="text-muted-ats" style="font-size:0.88rem; line-height:1.6;">
+        No evaluation summary available yet — run Evaluate & Rank first.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const CANDIDATE_CTX = {
+    resumeId: {{ resume_id }},
+    jdId: {{ jd_id or 'null' }},
+    evalId: {{ request.args.get('eval_id') or 'null' }},
+  };
+
+</script>
+
+<script src="{{ url_for('static', filename='js/app-state.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/candidate.js') }}"></script>
+{% endblock %}
+
+
+
+NEW CODE
+{% extends "base.html" %}
+{% block page_title %}Candidate Profile{% endblock %}
+{% block title %}{{ profile.name }} · {{ app_name }}{% endblock %}
+{% block page_subtitle %}Full ATS breakdown, ranking rationale, and resume details.{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/candidate.css') }}">{% endblock %}
+
+
+{% block content %}
+<div class="mb-3">
+  <a href="{{ url_for('ranking.ranking_page') }}{% if jd_id %}?jd_id={{ jd_id }}{% endif %}" class="btn btn-ats-ghost btn-sm">
+    <i class="fa-solid fa-arrow-left me-1"></i> Back to Ranking
+  </a>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-4 ">
+    <div class="section-card text-center" data-aos="fade-up">
+      <div class="candidate-avatar-lg mx-auto mb-3" id="candAvatar">{{ profile.name[:1]|upper if profile.name else "?" }}</div>
+      <h4 class="mb-0" id="candName">{{ profile.name }}</h4>
+      <p class="text-muted-ats mb-3" id="candEmail">{{ profile.email }}</p>
+
+      <div class="d-flex justify-content-center gap-2 mb-3" id="candContactPills">
+        {% if profile.phone %}<span class="pill pill-muted"><i class="fa-solid fa-phone me-1"></i>{{ profile.phone }}</span>{% endif %}
+        {% if profile.location %}<span class="pill pill-muted"><i class="fa-solid fa-location-dot me-1"></i>{{ profile.location }}</span>{% endif %}
+      </div>
+
+      <div class="score-ring-wrap mx-auto mb-2">
+        <canvas id="scoreRing" width="140" height="140"></canvas>
+        <div class="score-ring-center">
+          <div class="score-ring-value" id="ringScoreValue">—</div>
+          <div class="score-ring-label-sm">ATS Score</div>
+        </div>
+      </div>
+
+      <div id="candBandPill"></div>
+    </div>
+
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-graduation-cap me-1 text-muted-ats"></i> Education</h5>
+      <div class="text-muted-ats" style="font-size:0.85rem;">
+        <div class="mb-1"><strong>{{ profile.degree or "—" }}</strong>{% if profile.major %} in {{ profile.major }}{% endif %}</div>
+        <div>{{ profile.university or "—" }}{% if profile.graduation_year %} · {{ profile.graduation_year }}{% endif %}</div>
+        {% if profile.cgpa %}<div>CGPA: {{ profile.cgpa }}</div>{% endif %}
+      </div>
+      <h5 class="mt-3"><i class="fa-solid fa-briefcase me-1 text-muted-ats"></i> Experience</h5>
+      <div class="text-muted-ats" style="font-size:0.85rem;">{{ profile.experience_years or 0 }} years total</div>
+    </div>
+
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-screwdriver-wrench me-1 text-muted-ats"></i> Skills</h5>
+      <div>
+        {% for s in profile.skills %}<span class="skill-pill-match">{{ s }}</span>{% else %}<span class="text-muted-ats">None recorded</span>{% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-chart-simple me-1 text-muted-ats"></i> ATS Category Breakdown</h5>
+      <canvas id="categoryRadar" height="220"></canvas>
+    </div>
+
+    <div class="row g-3" id="newrow">
+      <div class="col-md-6">
+        <div class="section-card h-100" data-aos="fade-up">
+          <h5><i class="fa-solid fa-check text-success me-1"></i> Matched Skills</h5>
+          <div id="matchedSkillsBox"><span class="text-muted-ats">Load a ranking result to see match details.</span></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="section-card h-100" data-aos="fade-up">
+          <h5><i class="fa-solid fa-xmark text-danger me-1"></i> Missing Skills</h5>
+          <div id="missingSkillsBox"><span class="text-muted-ats">Load a ranking result to see gap details.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-shield-halved me-1 text-muted-ats"></i> Risk Breakdown</h5>
+      <div id="riskBox"><span class="text-muted-ats">No risk flags on record.</span></div>
+    </div>
+
+    <div class="row g-3 ">
+      <div class="col-md-6">
+        <div class="section-card h-100" data-aos="fade-up">
+          <h5><i class="fa-solid fa-thumbs-up text-success me-1"></i> Top Strengths</h5>
+          <ul id="strengthsList" class="text-muted-ats" style="font-size:0.87rem; padding-left:18px;"></ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="section-card h-100" data-aos="fade-up">
+          <h5><i class="fa-solid fa-triangle-exclamation text-warning me-1"></i> Top Weaknesses</h5>
+          <ul id="weaknessesList" class="text-muted-ats" style="font-size:0.87rem; padding-left:18px;"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card" id="newbox" data-aos="fade-up">
+      <h5><i class="fa-solid fa-robot me-1 text-muted-ats"></i> AI Explanation & Hire Recommendation</h5>
+      <div id="llmExplanationBox" class="text-muted-ats" style="font-size:0.88rem; line-height:1.6;">
+        No evaluation summary available yet — run Evaluate & Rank first.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const CANDIDATE_CTX = {
+    resumeId: {{ resume_id }},
+    jdId: {{ jd_id or 'null' }},
+    evalId: {{ request.args.get('eval_id') or 'null' }},
+  };
+
+</script>
+
+<script src="{{ url_for('static', filename='js/app-state.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/candidate.js') }}"></script>
+{% endblock %}

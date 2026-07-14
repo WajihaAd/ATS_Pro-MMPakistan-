@@ -1,0 +1,28 @@
+#  Web framework 
+Flask==3.1.3
+Werkzeug==3.1.4
+python-dotenv==1.0.1
+
+# Database 
+psycopg[binary]==3.2.4
+
+#  Gemini AI SDK (resume_extractor_gemini.py, job_description_parser.py) 
+google-genai>=1.5.0,<2.0.0
+
+#  Resume / JD file parsing 
+pdfplumber==0.11.5
+python-docx==1.1.2
+
+# Data handling & export (exporter.py, export_routes.py)
+pandas==2.2.3
+openpyxl==3.1.5
+
+# Production server (recommended over `python app.py` in prod) 
+gunicorn==23.0.0
+
+# ── Optional: only needed if you add back
+#   core/ats_evaluation_output_schema.json for strict LLM-output
+#   validation in ats_score_calculator.py. Without the schema file,
+#   leave this commented out — the module's built-in fallback
+#   validator (required-keys check) is used instead.
+# jsonschema==4.23.0

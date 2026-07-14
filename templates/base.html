@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{% block title %}AI-Powered ATS{% endblock %}</title> 
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+<div class="app-shell">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon"><i class="fa-solid fa-robot"></i></span>
+      <span class="brand-text">ATS<span class="brand-accent">Pro</span></span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a href="{{ url_for('main.dashboard') }}" class="nav-link {{ 'active' if active == 'dashboard' }}">
+        <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span>
+      </a>
+
+      <div class="nav-section-label">Recruit</div>
+      <a href="{{ url_for('jd.upload_job_page') }}" class="nav-link {{ 'active' if active == 'upload_job' }}">
+        <i class="fa-solid fa-file-lines"></i><span>Job Description</span>
+      </a>
+      <a href="{{ url_for('resume.upload_resume_page') }}"
+   onclick="ATSState.clearResumes()" class="nav-link {{ 'active' if active == 'upload_resume' }}">
+        <i class="fa-solid fa-cloud-arrow-up"></i><span>Upload Resumes</span>
+      </a>
+      <a href="{{ url_for('evaluate.evaluate_page') }}" class="nav-link {{ 'active' if active == 'evaluate' }}">
+        <i class="fa-solid fa-bolt"></i><span>Evaluate</span>
+      </a>
+      <a href="{{ url_for('ranking.ranking_page') }}" class="nav-link {{ 'active' if active == 'ranking' }}">
+        <i class="fa-solid fa-ranking-star"></i><span>Ranking</span>
+      </a>
+
+      <div class="nav-section-label">Insights</div>
+      <a href="{{ url_for('reports.reports_page') }}" class="nav-link {{ 'active' if active == 'reports' }}">
+        <i class="fa-solid fa-chart-pie"></i><span>Reports</span>
+      </a>
+      <a href="{{ url_for('settings.settings_page') }}" class="nav-link {{ 'active' if active == 'settings' }}">
+        <i class="fa-solid fa-gear"></i><span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="disclaimer-mini">
+        <i class="fa-solid fa-circle-info"></i>
+        AI-assisted rankings. Verify before hiring decisions.
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main-wrap">
+    <header class="topbar">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <div class="topbar-title">
+        <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+        <p>{% block page_subtitle %}Welcome back — here's your recruiting snapshot.{% endblock %}</p>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="theme-toggle" id="themeToggle" title="Toggle light / dark mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <div class="topbar-avatar" title="Recruiter">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+
+<div id="toastStack" class="toast-stack" aria-live="polite" aria-atomic="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+<script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+<script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

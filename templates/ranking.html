@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Ranking · {{ app_name }}{% endblock %}
+{% block page_title %}Candidate Ranking{% endblock %}
+{% block page_subtitle %}Sorted, filterable results for the active job description.{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/ranking.css') }}">{% endblock %}
+
+{% block content %}
+<div class="section-card" data-aos="fade-up">
+  <div class="row g-3 align-items-end">
+    <div class="col-md-4">
+      <label class="form-label text-muted-ats" style="font-size:0.78rem;">Job Description</label>
+      <select class="form-select ats-select" id="jdSelect" onchange="onJdChange()"></select>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label text-muted-ats" style="font-size:0.78rem;">Search candidates</label>
+      <input type="text" class="form-control ats-select" id="searchInput" placeholder="Name or email…" oninput="applyFilters()">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label text-muted-ats" style="font-size:0.78rem;">Min ATS score</label>
+      <input type="number" class="form-control ats-select" id="minScoreInput" value="0" min="0" max="100" onchange="reloadRanking()">
+    </div>
+    <div class="col-md-2">
+      <div class="form-check mt-4 pt-1">
+        <input class="form-check-input" type="checkbox" id="hireOnlyCheck" onchange="reloadRanking()">
+        <label class="form-check-label text-muted-ats" for="hireOnlyCheck" style="font-size:0.82rem;">Hire+ only</label>
+      </div>
+    </div>
+    <div class="col-md-1 text-end">
+      <button class="btn btn-ats-ghost" onclick="reloadRanking()" title="Refresh"><i class="fa-solid fa-rotate"></i></button>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 mb-3" id="tierSummaryRow"></div>
+
+<div class="section-card" data-aos="fade-up">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+      <h5 class="mb-0">Ranked Candidates</h5>
+      <p class="section-sub mb-0" id="resultCountLabel">0 candidates</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-ats-outline btn-sm" onclick="exportFile('excel')"><i class="fa-solid fa-file-excel me-1"></i> Excel</button>
+      <div class="dropdown">
+        <button class="btn btn-ats-outline btn-sm dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-file-csv me-1"></i> CSV</button>
+        <ul class="dropdown-menu dropdown-menu-end ats-modal">
+          <li><a class="dropdown-item" href="#" onclick="exportFile('csv/all');return false;">All candidates</a></li>
+          <li><a class="dropdown-item" href="#" onclick="exportFile('csv/top10');return false;">Top 10</a></li>
+          <li><a class="dropdown-item" href="#" onclick="exportFile('csv/top20');return false;">Top 20</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="rankingTableWrap" style="overflow-x:auto;">
+    <table class="ats-table" id="rankingTable">
+      <thead>
+        <tr>
+          <th onclick="sortBy('rank')">Rank <i class="fa-solid fa-sort"></i></th>
+          <th onclick="sortBy('candidate_name')">Candidate <i class="fa-solid fa-sort"></i></th>
+          <th>Email</th>
+          <th onclick="sortBy('display_score')">ATS Score <i class="fa-solid fa-sort"></i></th>
+          <th onclick="sortBy('final_rank_score')">Final Score <i class="fa-solid fa-sort"></i></th>
+          <th>Hire Decision</th>
+          <th>Risk</th>
+          <th>Matched Skills</th>
+          <th>Missing Skills</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="rankingTbody"></tbody>
+    </table>
+  </div>
+
+  <div id="rankingEmptyState" class="empty-state" style="display:none;">
+    <i class="fa-solid fa-inbox"></i>
+    No ranked candidates for this job description yet. Run an evaluation first.
+    <div class="mt-2"><a href="{{ url_for('evaluate.evaluate_page') }}" class="btn btn-ats-primary btn-sm">Go to Evaluate</a></div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mt-3" id="paginationRow" style="display:none;">
+    <span class="text-muted-ats" style="font-size:0.8rem;" id="pageInfo"></span>
+    <div class="btn-group">
+      <button class="btn btn-ats-ghost btn-sm" onclick="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="btn btn-ats-ghost btn-sm" onclick="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/app-state.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ranking.js') }}"></script>
+{% endblock %}

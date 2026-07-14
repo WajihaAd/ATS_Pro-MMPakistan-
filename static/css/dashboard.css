@@ -1,0 +1,23 @@
+.jd-mini-title { font-weight: 700; font-size: 1rem; margin-bottom: 2px; }
+.jd-mini-meta { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 12px; }
+
+.top-candidate-card { display: flex; align-items: center; gap: 14px; }
+.top-candidate-avatar {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--accent-gradient); color: #0b0f17;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1.2rem; flex-shrink: 0;
+}
+.top-candidate-name { font-weight: 700; }
+.top-candidate-score { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+
+.upload-mini-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 0.86rem;
+}
+.upload-mini-row:last-child { border-bottom: none; }
+.upload-mini-icon { color: var(--accent); width: 18px; text-align: center; }
+.upload-mini-name { font-weight: 600; flex: 1; }
+.upload-mini-time { color: var(--text-dim); font-size: 0.76rem; }

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Reports · {{ app_name }}{% endblock %}
+{% block page_title %}Hiring Analytics{% endblock %}
+{% block page_subtitle %}Cross-JD trends, score distribution, and skill gaps.{% endblock %}
+
+{% block content %}
+<div id="reportsLoading" class="empty-state">
+  <div class="spinner-ring" style="margin: 0 auto 16px;"></div>
+  Loading reports…
+</div>
+
+<div id="reportsContent" style="display:none;">
+  <div class="row g-3 mb-2">
+    <div class="col-6 col-md-3" data-aos="fade-up">
+      <div class="stat-card">
+        <div class="stat-icon icon-blue"><i class="fa-solid fa-file-lines"></i></div>
+        <div class="stat-value" id="rptTotalJds">0</div>
+        <div class="stat-label">Job Descriptions</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="50">
+      <div class="stat-card">
+        <div class="stat-icon icon-purple"><i class="fa-solid fa-users"></i></div>
+        <div class="stat-value" id="rptTotalCandidates">0</div>
+        <div class="stat-label">Total Candidates</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="100">
+      <div class="stat-card">
+        <div class="stat-icon icon-green"><i class="fa-solid fa-gauge"></i></div>
+        <div class="stat-value" id="rptAvgAts">0</div>
+        <div class="stat-label">Average ATS Score</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="150">
+      <div class="stat-card">
+        <div class="stat-icon icon-amber"><i class="fa-solid fa-percent"></i></div>
+        <div class="stat-value" id="rptHireRate">0%</div>
+        <div class="stat-label">Hire Rate</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-lg-6">
+      <div class="section-card" data-aos="fade-up">
+        <h5>Score Distribution</h5>
+        <p class="section-sub">Across all evaluations on record.</p>
+        <div class="chart-container">
+    <canvas id="rptScoreChart"></canvas>
+</div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="section-card" data-aos="fade-up">
+        <h5>Hiring Mix</h5>
+        <p class="section-sub">Overall decision breakdown.</p>
+        <div class="chart-container">
+    <canvas id="rptMixChart"></canvas>
+</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card" data-aos="fade-up">
+    <h5>Recent Job Descriptions</h5>
+    <p class="section-sub">Jump straight to a ranking view.</p>
+    <div id="rptJdList"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+{% endblock %}

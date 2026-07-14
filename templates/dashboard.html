@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · {{ app_name }}{% endblock %}
+{% block page_title %}Executive Dashboard{% endblock %}
+{% block page_subtitle %}Live snapshot of candidates, evaluations and hiring signal.{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">{% endblock %}
+
+{% block content %}
+<div class="ticker-wrap">
+  <div class="ticker">
+    <i class="fa-solid fa-robot"></i>&nbsp; AI-Assisted Recruitment System — candidate rankings and ATS scores are generated using AI and should be reviewed by recruiters before making hiring decisions.
+  </div>
+</div>
+
+<div id="dashLoading" class="empty-state">
+  <div class="spinner-ring" style="margin: 0 auto 16px;"></div>
+  Loading dashboard…
+</div>
+
+<div id="dashContent" style="display:none;">
+
+  <div class="row g-3 mb-2">
+    <div class="col-6 col-md-3" data-aos="fade-up">
+      <div class="stat-card">
+        <div class="stat-icon icon-blue"><i class="fa-solid fa-users"></i></div>
+        <div class="stat-value" id="statTotalCandidates">0</div>
+        <div class="stat-label">Total Candidates</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="50">
+      <div class="stat-card">
+        <div class="stat-icon icon-green"><i class="fa-solid fa-user-check"></i></div>
+        <div class="stat-value" id="statHired">0</div>
+        <div class="stat-label">Hire / Strong Hire</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="100">
+      <div class="stat-card">
+        <div class="stat-icon icon-amber"><i class="fa-solid fa-user-clock"></i></div>
+        <div class="stat-value" id="statMaybe">0</div>
+        <div class="stat-label">Maybe</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="150">
+      <div class="stat-card">
+        <div class="stat-icon icon-red"><i class="fa-solid fa-user-xmark"></i></div>
+        <div class="stat-value" id="statNoHire">0</div>
+        <div class="stat-label">No Hire</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-4" data-aos="fade-up">
+      <div class="stat-card">
+        <div class="stat-icon icon-purple"><i class="fa-solid fa-gauge"></i></div>
+        <div class="stat-value" id="statAvgAts">0</div>
+        <div class="stat-label">Average ATS Score</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4" data-aos="fade-up" data-aos-delay="50">
+      <div class="stat-card">
+        <div class="stat-icon icon-blue"><i class="fa-solid fa-star"></i></div>
+        <div class="stat-value" id="statAvgFinal">0</div>
+        <div class="stat-label">Average Final Score</div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="100">
+      <div class="stat-card">
+        <div class="stat-icon icon-green"><i class="fa-solid fa-file-lines"></i></div>
+        <div class="stat-value" id="statTotalJds">0</div>
+        <div class="stat-label">Job Descriptions Parsed</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-lg-7">
+      <div class="section-card" data-aos="fade-up">
+        <h5><i class="fa-solid fa-chart-column me-1 text-muted-ats"></i> Score Distribution</h5>
+        <p class="section-sub">ATS scores across the most recent 200 evaluations.</p>
+        <canvas id="scoreDistChart" height="130"></canvas>
+      </div>
+
+      <div class="section-card" data-aos="fade-up">
+        <h5><i class="fa-solid fa-clock-rotate-left me-1 text-muted-ats"></i> Recent Uploads</h5>
+        <p class="section-sub">Latest resumes added to the pipeline.</p>
+        <div id="recentUploadsList"></div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="section-card" data-aos="fade-up">
+        <h5><i class="fa-solid fa-file-circle-check me-1 text-muted-ats"></i> Latest Job Description</h5>
+        <div id="latestJdBox">
+          <div class="empty-state py-4"><i class="fa-solid fa-inbox"></i>No job description parsed yet.</div>
+        </div>
+      </div>
+
+      <div class="section-card" data-aos="fade-up">
+        <h5><i class="fa-solid fa-trophy me-1 text-muted-ats"></i> Top Ranked Candidate</h5>
+        <div id="topCandidateBox">
+          <div class="empty-state py-4"><i class="fa-solid fa-inbox"></i>No candidates evaluated yet.</div>
+        </div>
+      </div>
+
+      <div class="section-card" data-aos="fade-up">
+        <h5><i class="fa-solid fa-chart-pie me-1 text-muted-ats"></i> Hiring Mix</h5>
+        <canvas id="hireMixChart" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card text-center" data-aos="fade-up">
+    <h5 class="mb-2">Ready for your next hire?</h5>
+    <p class="section-sub mb-3">Parse a job description and upload resumes to start evaluating candidates.</p>
+    <a href="{{ url_for('jd.upload_job_page') }}" class="btn btn-ats-primary me-2"><i class="fa-solid fa-plus me-1"></i> New Job Description</a>
+    <a href="{{ url_for('resume.upload_resume_page') }}" class="btn btn-ats-outline"><i class="fa-solid fa-cloud-arrow-up me-1"></i> Upload Resumes</a>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

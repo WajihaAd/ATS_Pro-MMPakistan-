@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Upload Resumes · {{ app_name }}{% endblock %}
+{% block page_title %}Upload Resumes{% endblock %}
+{% block page_subtitle %}Drag and drop candidate resumes — duplicates are detected automatically.{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">{% endblock %}
+
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="section-card" data-aos="fade-up">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">Active Job Description</h5>
+      </div>
+      <div id="activeJdBanner" class="jd-list-item mb-0">
+        <div class="flex-grow-1">
+          <div class="jd-item-title" id="activeJdTitle">No job description selected</div>
+          <div class="jd-item-meta">Parse or select a JD first so evaluation has something to compare against.</div>
+        </div>
+        <a href="{{ url_for('jd.upload_job_page') }}" class="btn btn-ats-ghost btn-sm">Change <i class="fa-solid fa-pen ms-1"></i></a>
+      </div>
+    </div>
+
+    <div class="section-card" data-aos="fade-up">
+      <h5>Resume Files</h5>
+      <p class="section-sub">PDF, DOCX, TXT or MD — multiple files supported.</p>
+
+      <div class="dropzone" id="resumeDropzone">
+        <i class="fa-solid fa-cloud-arrow-up dz-icon"></i>
+        <div class="fw-bold mb-1">Drag & drop resumes here</div>
+        <div class="text-muted-ats" style="font-size:0.82rem;">or click to browse — you can select multiple files</div>
+        <input type="file" id="resumeFileInput" accept=".pdf,.docx,.txt,.md" multiple hidden>
+      </div>
+
+      <div id="resumeFileList" class="mt-3"></div>
+
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <span class="text-muted-ats" id="resumeFileCount" style="font-size:0.8rem;">0 files staged</span>
+        <button class="btn btn-ats-primary" id="uploadResumesBtn" onclick="uploadStagedResumes()" disabled>
+          <i class="fa-solid fa-cloud-arrow-up me-1"></i> Process Resumes
+        </button>
+      </div>
+
+      <div id="resumeUploadProgress" style="display:none;" class="mt-3">
+        <div class="ats-progress mb-2"><div class="ats-progress-bar" id="resumeProgressBar" style="width:0%"></div></div>
+        <div class="text-muted-ats" id="resumeProgressText" style="font-size:0.8rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="section-card" data-aos="fade-up">
+      <h5><i class="fa-solid fa-list-check me-1 text-muted-ats"></i> Ready for Evaluation</h5>
+      <p class="section-sub">Resumes staged in this session.</p>
+      <div id="stagedResumesList"><div class="empty-state py-4"><i class="fa-solid fa-inbox"></i>No resumes staged yet.</div></div>
+      <a href="{{ url_for('evaluate.evaluate_page') }}" class="btn btn-ats-primary w-100 mt-2" id="goEvaluateBtn" style="display:none;">
+        Next: Evaluate & Rank <i class="fa-solid fa-arrow-right ms-1"></i>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/app-state.js') }}"></script>
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+<script src="{{ url_for('static', filename='js/resume.js') }}"></script>
+{% endblock %}
