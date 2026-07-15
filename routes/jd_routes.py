@@ -4,16 +4,19 @@ from flask import Blueprint, render_template, request, jsonify, current_app
 
 from services import pipeline_service as svc
 from extract_helper import extract_text_from_upload, allowed_file
+from routes.auth_routes import login_required
 
 jd_bp = Blueprint("jd", __name__)
 
 
 @jd_bp.route("/upload_job")
+@login_required
 def upload_job_page():
     return render_template("upload_job.html", active="upload_job")
 
 
 @jd_bp.route("/api/jd/extract", methods=["POST"])
+@login_required
 def extract_jd_text():
     """Extract raw text from an uploaded JD file (pdf/docx/txt) for preview
     before parsing — mirrors the 'Upload file' mode in the old sidebar."""
@@ -30,6 +33,7 @@ def extract_jd_text():
 
 
 @jd_bp.route("/api/jd/parse", methods=["POST"])
+@login_required
 def parse_jd():
     data = request.get_json(silent=True) or {}
     jd_text = data.get("jd_text", "")
@@ -39,6 +43,7 @@ def parse_jd():
 
 
 @jd_bp.route("/api/jd/list")
+@login_required
 def list_jds():
     try:
         jds = svc.fetch_all_jds()
@@ -48,6 +53,7 @@ def list_jds():
 
 
 @jd_bp.route("/api/jd/<int:jd_id>")
+@login_required
 def get_jd(jd_id: int):
     rec = svc.fetch_jd_record(jd_id)
     if not rec:

@@ -64,4 +64,24 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
   };
+
+  // ---- Topbar user menu (logout dropdown, added for authentication) ----
+  document.addEventListener("DOMContentLoaded", () => {
+    const userWrap = document.getElementById("topbarUser");
+    const trigger = document.getElementById("topbarUserTrigger");
+    if (!userWrap || !trigger) return;
+
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      userWrap.classList.toggle("open");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!userWrap.contains(e.target)) userWrap.classList.remove("open");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") userWrap.classList.remove("open");
+    });
+  });
 })();

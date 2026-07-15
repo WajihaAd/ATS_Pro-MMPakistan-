@@ -167,7 +167,7 @@ function renderTable() {
 function rowHtml(c) {
   const initials = (c.candidate_name || "?").trim().charAt(0).toUpperCase();
   const tierClass = "tier-" + (c.tier || "D").replace("+", "plus");
-  const bandClass = bandPillClass(c.score_band);
+  const bandClass = bandPillClass(c.llm_recommendation);
   const matched = (c.matched_skills || []).slice(0, 4);
   const missing = (c.missing_skills || []).slice(0, 4);
 
@@ -186,7 +186,11 @@ function rowHtml(c) {
       <td class="text-muted-ats">${escapeHtml(c.email || "—")}</td>
       <td><span class="score-cell">${fmtScore(c.display_score)}</span></td>
       <td>${fmtScore(c.final_rank_score)}</td>
-      <td><span class="pill ${bandClass}">${escapeHtml(c.score_band || "—")}</span></td>
+      <td>
+  <span class="pill ${bandClass}">
+    ${escapeHtml(c.llm_recommendation || "—")}
+  </span>
+</td>
       <td>${(c.risk_flags || []).length ? `<span class="pill pill-red">${(c.risk_flags || []).length} flag(s)</span>` : `<span class="pill pill-muted">None</span>`}</td>
       <td>${matched.map((s) => `<span class="skill-pill-match">${escapeHtml(s)}</span>`).join("") || "—"}</td>
       <td>${missing.map((s) => `<span class="skill-pill-missing">${escapeHtml(s)}</span>`).join("") || "—"}</td>

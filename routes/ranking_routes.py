@@ -3,16 +3,19 @@ from __future__ import annotations
 from flask import Blueprint, render_template, request, jsonify
 
 from services import pipeline_service as svc
+from routes.auth_routes import login_required
 
 ranking_bp = Blueprint("ranking", __name__)
 
 
 @ranking_bp.route("/ranking")
+@login_required
 def ranking_page():
     return render_template("ranking.html", active="ranking")
 
 
 @ranking_bp.route("/api/rank")
+@login_required
 def api_rank():
     jd_id = request.args.get("jd_id", type=int)
     if not jd_id:

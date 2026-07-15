@@ -3,11 +3,13 @@ from __future__ import annotations
 from flask import Blueprint, render_template, jsonify, request, abort
 
 from services import pipeline_service as svc
+from routes.auth_routes import login_required
 
 candidate_bp = Blueprint("candidate", __name__)
 
 
 @candidate_bp.route("/candidate/<int:resume_id>")
+@login_required
 def candidate_page(resume_id: int):
     jd_id = request.args.get("jd_id", type=int)
     profile = svc.fetch_resume_profile(resume_id)
@@ -17,6 +19,7 @@ def candidate_page(resume_id: int):
 
 
 @candidate_bp.route("/api/candidate/<int:resume_id>")
+@login_required
 def candidate_detail(resume_id: int):
     eval_id = request.args.get("eval_id", type=int)
     profile = svc.fetch_resume_profile(resume_id)

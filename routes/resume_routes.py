@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, request, jsonify, current_app
 
 from services import pipeline_service as svc
 from extract_helper import allowed_file
+from routes.auth_routes import login_required
 
 resume_bp = Blueprint("resume", __name__)
 
@@ -11,6 +12,7 @@ import io
 from flask import send_file
 
 @resume_bp.route("/download_resume/<int:resume_id>")
+@login_required
 def download_resume(resume_id):
 
     resume = svc.get_resume_file(resume_id)
@@ -28,11 +30,13 @@ def download_resume(resume_id):
 
 
 @resume_bp.route("/upload_resume")
+@login_required
 def upload_resume_page():
     return render_template("upload_resume.html", active="upload_resume")
 
 
 @resume_bp.route("/api/resume/upload", methods=["POST"])
+@login_required
 def upload_resumes():
     """Accepts one or more files under the 'files' field, processes each
     through the unmodified resume_extractor_gemini pipeline, and returns a
@@ -68,6 +72,7 @@ def upload_resumes():
 
 
 @resume_bp.route("/api/resume/list")
+@login_required
 def list_resumes():
     try:
         resumes = svc.fetch_all_resumes()

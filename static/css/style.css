@@ -581,3 +581,96 @@ body.light-mode .topbar { background: rgba(255, 255, 255, 0.75); }
     width: 100% !important;
     height: 100% !important;
 }
+
+/* ---------------------------------------------------------
+   Topbar user menu (added for authentication)
+   --------------------------------------------------------- */
+.topbar-user { position: relative; }
+
+.topbar-user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 5px 10px 5px 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.topbar-user-trigger:hover { border-color: var(--border); background: var(--bg-card); }
+
+.topbar-user-trigger .topbar-avatar {
+  width: 36px; height: 36px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.topbar-user-name {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.86rem;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar-user-caret {
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  transition: transform 0.15s ease;
+}
+.topbar-user.open .topbar-user-caret { transform: rotate(180deg); }
+
+.topbar-user-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 190px;
+  background: linear-gradient(150deg, var(--bg-card), var(--bg-card-alt));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: all 0.16s ease;
+  z-index: 50;
+}
+.topbar-user.open .topbar-user-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.topbar-user-menu-role {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 6px;
+}
+
+.topbar-user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.12s ease;
+}
+.topbar-user-menu-item:hover { background: var(--danger-bg); color: var(--danger); }
+
+@media (max-width: 576px) {
+  .topbar-user-name { display: none; }
+}

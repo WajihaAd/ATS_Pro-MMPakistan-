@@ -3,16 +3,19 @@ from __future__ import annotations
 from flask import Blueprint, render_template, request, jsonify
 
 from services import pipeline_service as svc
+from routes.auth_routes import login_required
 
 evaluate_bp = Blueprint("evaluate", __name__)
 
 
 @evaluate_bp.route("/evaluate")
+@login_required
 def evaluate_page():
     return render_template("evaluation.html", active="evaluate")
 
 
 @evaluate_bp.route("/api/evaluate/one", methods=["POST"])
+@login_required
 def evaluate_one():
     """Evaluates a single resume against a single JD. The frontend calls this
     once per resume in sequence, updating the progress bar and status line

@@ -3,16 +3,19 @@ from __future__ import annotations
 from flask import Blueprint, render_template, jsonify
 
 from services import pipeline_service as svc
+from routes.auth_routes import login_required
 
 reports_bp = Blueprint("reports", __name__)
 
 
 @reports_bp.route("/reports")
+@login_required
 def reports_page():
     return render_template("reports.html", active="reports")
 
 
 @reports_bp.route("/api/reports/summary")
+@login_required
 def reports_summary():
     try:
         stats = svc.get_dashboard_stats()

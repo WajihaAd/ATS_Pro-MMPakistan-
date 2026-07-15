@@ -69,6 +69,15 @@ def ensure_schema(force: bool = False) -> bool:
                     created_at TIMESTAMPTZ DEFAULT NOW()
                 );
 
+                CREATE TABLE IF NOT EXISTS users (
+                    id SERIAL PRIMARY KEY,
+                    full_name VARCHAR(100),
+                    email VARCHAR(150) UNIQUE NOT NULL,
+                    password_hash TEXT NOT NULL,
+                    role VARCHAR(50) DEFAULT 'hr',
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+
                 CREATE TABLE IF NOT EXISTS resumes (
                     id SERIAL PRIMARY KEY,
                     name TEXT,

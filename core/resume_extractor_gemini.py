@@ -41,6 +41,7 @@ if not DB_PASSWORD:
 client = genai.Client(api_key=API_KEY)
 
 DEFAULT_MODEL = "gemini-2.5-flash"
+# DEFAULT_MODEL = "gemini-3.5-flash"
 
 print("🚀 Resume extractor starting...")
 
@@ -240,7 +241,7 @@ RESUME:
     for attempt in range(5):
         try:
             time.sleep(random.uniform(0.5, 1.2))
-
+            print("MODEL:", model)
             response = client.models.generate_content(
                 model=model,
                 contents=prompt,

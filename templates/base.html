@@ -81,8 +81,18 @@
         <button class="theme-toggle" id="themeToggle" title="Toggle light / dark mode">
           <i class="fa-solid fa-moon"></i>
         </button>
-        <div class="topbar-avatar" title="Recruiter">
-          <i class="fa-solid fa-user-tie"></i>
+        <div class="topbar-user" id="topbarUser">
+          <button class="topbar-user-trigger" id="topbarUserTrigger" title="{{ session.get('user_name', 'Recruiter') }}">
+            <div class="topbar-avatar">{{ (session.get('user_name') or 'R')[0]|upper }}</div>
+            <span class="topbar-user-name">{{ session.get('user_name', 'Recruiter') }}</span>
+            <i class="fa-solid fa-chevron-down topbar-user-caret"></i>
+          </button>
+          <div class="topbar-user-menu" id="topbarUserMenu">
+            <div class="topbar-user-menu-role"><i class="fa-solid fa-user-tie"></i> {{ session.get('role', 'hr')|capitalize }}</div>
+            <a href="{{ url_for('auth.logout') }}" class="topbar-user-menu-item">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
+            </a>
+          </div>
         </div>
       </div>
     </header>

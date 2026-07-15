@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from flask import Blueprint, render_template, current_app
+from routes.auth_routes import login_required
 
 settings_bp = Blueprint("settings", __name__)
 
 
 @settings_bp.route("/settings")
+@login_required
 def settings_page():
     config_status = {
         "gemini_api_key_set": bool(current_app.config.get("GEMINI_API_KEY")),

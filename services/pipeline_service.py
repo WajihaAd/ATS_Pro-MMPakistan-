@@ -32,9 +32,9 @@ import psycopg
 from database import get_db_connection, ensure_schema
 
 # Unmodified core pipeline (see config.py for why these flat imports work)
-from job_description_parser import parse_job_description
-from resume_extractor_gemini import parse_resume, get_resume_hash, extract_text_from_file
-from compare_resume_and_jd import compare_resume_and_jd
+from core.job_description_parser import parse_job_description
+from core.resume_extractor_gemini import parse_resume, get_resume_hash, extract_text_from_file
+from core.compare_resume_and_jd import compare_resume_and_jd
 from core.ranking import (
     rank_all_candidates,
     get_tier_summary,
@@ -42,7 +42,7 @@ from core.ranking import (
     export_ranked_to_dicts,
     RankingFilter,
 )
-from exporter import generate_excel, generate_csv_all, generate_csv_top10, generate_csv_top20
+from core.exporter import generate_excel, generate_csv_all, generate_csv_top10, generate_csv_top20
 
 
 # ---------------------------------------------------------------------------

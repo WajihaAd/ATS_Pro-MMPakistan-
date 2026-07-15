@@ -7,6 +7,7 @@ import pandas as pd
 from flask import Blueprint, request, jsonify, send_file
 
 from services import pipeline_service as svc
+from routes.auth_routes import login_required
 from exporter import generate_excel, generate_csv_all, generate_csv_top10, generate_csv_top20
 
 export_bp = Blueprint("export", __name__)
@@ -34,6 +35,7 @@ def _filters_from_args():
 
 
 @export_bp.route("/export/excel")
+@login_required
 def export_excel():
     jd_id = request.args.get("jd_id", type=int)
     if not jd_id:
@@ -54,6 +56,7 @@ def export_excel():
 
 
 @export_bp.route("/export/csv/<kind>")
+@login_required
 def export_csv(kind: str):
     jd_id = request.args.get("jd_id", type=int)
     if not jd_id:

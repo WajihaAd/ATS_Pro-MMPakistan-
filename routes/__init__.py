@@ -2,6 +2,7 @@ from flask import Flask
 
 
 def register_blueprints(app: Flask) -> None:
+    from routes.auth_routes import auth_bp
     from routes.main_routes import main_bp
     from routes.jd_routes import jd_bp
     from routes.resume_routes import resume_bp
@@ -12,6 +13,7 @@ def register_blueprints(app: Flask) -> None:
     from routes.settings_routes import settings_bp
     from routes.export_routes import export_bp
 
+    app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(jd_bp)
     app.register_blueprint(resume_bp)

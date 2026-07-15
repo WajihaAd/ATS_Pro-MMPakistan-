@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account · ATS Pro</title>
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body class="auth-body">
+
+<div class="auth-shell">
+  <!-- ============ LEFT: brand / hero ============ -->
+  <section class="auth-hero">
+    <canvas id="authHeroCanvas" class="auth-hero-canvas"></canvas>
+    <div class="auth-hero-glow g1"></div>
+    <div class="auth-hero-glow g2"></div>
+
+    <div class="auth-hero-top">
+      <div class="auth-brand">
+        <span class="brand-icon"><i class="fa-solid fa-robot"></i></span>
+        <span class="brand-text">ATS<span class="brand-accent">Pro</span></span>
+      </div>
+      <p class="auth-tagline">AI-Powered Recruitment Intelligence</p>
+    </div>
+
+    <div class="auth-hero-mid">
+      <h1>Bring your hiring team onto <span class="grad">one AI-driven</span> platform</h1>
+      <p>Create your account to start uploading job descriptions, screening resumes, and ranking candidates with consistent, explainable AI scoring.</p>
+      <div class="auth-hero-stats">
+        <div class="stat"><b>10x</b><span>Faster screening</span></div>
+        <div class="stat"><b>AI</b><span>Powered scoring</span></div>
+        <div class="stat"><b>1</b><span>Unified pipeline</span></div>
+      </div>
+    </div>
+
+    <div class="auth-hero-bottom">
+      <span class="auth-feature-pill"><i class="fa-solid fa-file-lines"></i> Resume parsing</span>
+      <span class="auth-feature-pill"><i class="fa-solid fa-ranking-star"></i> Smart ranking</span>
+      <span class="auth-feature-pill"><i class="fa-solid fa-chart-pie"></i> Recruiting insights</span>
+    </div>
+  </section>
+
+  <!-- ============ RIGHT: form ============ -->
+  <section class="auth-form-panel">
+    <div class="auth-card">
+      <div class="auth-card-head">
+        <div class="mobile-brand">
+          <span class="brand-icon"><i class="fa-solid fa-robot"></i></span>
+          <span class="brand-text">ATS<span class="brand-accent">Pro</span></span>
+        </div>
+        <h2>Create your account</h2>
+        <p>Set up access to your team's recruiting workspace.</p>
+      </div>
+
+      <div id="signupAlert" class="auth-alert"></div>
+
+      <form id="signupForm" action="{{ url_for('auth.signup') }}" method="post" novalidate>
+        <div class="auth-field">
+          <label for="full_name">Full name</label>
+          <div class="auth-input-wrap">
+            <i class="fa-solid fa-user auth-input-icon"></i>
+            <input type="text" id="full_name" name="full_name" placeholder="Jane Doe" autocomplete="name" required>
+          </div>
+          <span class="auth-field-error" id="nameError"></span>
+        </div>
+
+        <div class="auth-field">
+          <label for="email">Work email</label>
+          <div class="auth-input-wrap">
+            <i class="fa-solid fa-envelope auth-input-icon"></i>
+            <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" required>
+          </div>
+          <span class="auth-field-error" id="emailError"></span>
+        </div>
+
+        <div class="auth-field">
+          <label for="password">Password</label>
+          <div class="auth-input-wrap">
+            <i class="fa-solid fa-lock auth-input-icon"></i>
+            <input type="password" id="password" name="password" placeholder="Create a password" autocomplete="new-password" required>
+            <button type="button" class="auth-toggle-visibility" data-target="password" aria-label="Show password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <span class="auth-field-error" id="passwordError"></span>
+          <div class="pw-strength" id="pwStrength" data-level="0">
+            <div class="pw-strength-bar"><span></span><span></span><span></span><span></span></div>
+            <span class="pw-strength-label" id="pwStrengthLabel">At least 8 characters</span>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="confirm_password">Confirm password</label>
+          <div class="auth-input-wrap">
+            <i class="fa-solid fa-lock auth-input-icon"></i>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter your password" autocomplete="new-password" required>
+            <button type="button" class="auth-toggle-visibility" data-target="confirm_password" aria-label="Show password">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <span class="auth-field-error" id="confirmError"></span>
+        </div>
+
+        <button type="submit" class="auth-submit" id="signupSubmit">
+          <span class="spinner"></span>
+          <span class="submit-label">Create Account</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <div class="auth-divider">Already registered</div>
+      <p class="auth-switch">
+        Already have an account? <a class="auth-link" href="{{ url_for('auth.login') }}">Sign in</a>
+      </p>
+
+      <div class="auth-disclaimer">
+        <i class="fa-solid fa-shield-halved"></i>
+        Passwords are hashed and never stored in plain text.
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

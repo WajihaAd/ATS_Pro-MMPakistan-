@@ -11,9 +11,9 @@ compare_resume_and_jd.py, ats_score_calculator.py, ranking.py, exporter.py).
 Run with:
     python app.py
 """
-
 from __future__ import annotations
-
+from extensions import mail
+import os
 import config  # noqa: F401  (import first: puts core/ on sys.path, loads .env)
 from flask import Flask, render_template
 
@@ -25,6 +25,20 @@ from routes import register_blueprints
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config.from_object(Config)
+    app.config["MAIL_SERVER"] = "smtp.gmail.com"
+    app.config["MAIL_PORT"] = 587
+    app.config["MAIL_USE_TLS"] = True
+
+    app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+    app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+    print("MAIL USERNAME:", os.getenv("MAIL_USERNAME"))
+    print("MAIL PASSWORD LENGTH:", len(os.getenv("MAIL_PASSWORD")))
+
+    app.config["MAIL_DEFAULT_SENDER"] = os.getenv(
+        "MAIL_DEFAULT_SENDER"
+    )
+
+    mail.init_app(app)
 
     register_blueprints(app)
 

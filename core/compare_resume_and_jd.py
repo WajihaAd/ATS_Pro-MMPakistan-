@@ -536,7 +536,7 @@ CATEGORY RULES:
   domain_score         — same domain = high; transferable = medium; unrelated = low
 
 top_weaknesses — MUST contain EXACTLY 3 items maximum (not more, not less if possible)
-Return ONLY the 3 most important weaknesses ranked by severity.
+Return ONLY the 3 most important weaknesses ranked by severi
 
 RISK FLAGS (risk_analysis.risk_flags) — include ONLY if strongly supported:
   insufficient_experience, missing_core_skills, degree_mismatch, major_mismatch,
@@ -557,10 +557,8 @@ ABSOLUTE RULES:
   - Output ONLY valid JSON matching the schema exactly
   - temperature=0 — deterministic output
 STRICT LIMIT RULES:
-- top_strengths— return maximum 3 important strengths.
-If fewer exist, return fewer.
-- top_weaknesses — return maximum 3 important weaknesses.
-If fewer exist, return fewer.
+- top_strengths: max 3 items
+- top_weaknesses: max 3 items
 - interview_focus_points: max 5 items
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 JSON OUTPUT REQUIREMENTS (MANDATORY)
@@ -627,12 +625,61 @@ def build_prompt(resume: dict, jd: dict) -> str:
 # =========================
 # GEMINI CLIENT
 # =========================
-def call_gemini(prompt: str, max_retries: int = 5) -> dict:
-    last_error: Optional[Exception] = None
+# def call_gemini(prompt: str, max_retries: int = 5) -> dict:
+#     last_error: Optional[Exception] = None
+
+#     for attempt in range(max_retries):
+#         try:
+#             time.sleep(random.uniform(0.5, 1.5))
+
+#             response = gemini_client.models.generate_content(
+#                 model=MODEL,
+#                 contents=prompt,
+#                 config={
+#                     "response_mime_type": "application/json",
+#                     "temperature": 0,
+#                 }
+#             )
+
+#             raw = response.text.strip()
+#             if raw.startswith("```"):
+#                 raw = raw.strip("`")
+#                 if raw.lower().startswith("json"):
+#                     raw = raw[4:].strip()
+
+#             parsed = json.loads(raw)
+#             logger.debug("Gemini call successful on attempt %d", attempt + 1)
+#             return parsed
+
+#         except ServerError as e:
+#             last_error = e
+#             wait = 2 ** (attempt + 1) + random.uniform(0, 1)
+#             logger.warning(
+#                 "Gemini ServerError (attempt %d): %s — retrying in %.1fs",
+#                 attempt + 1, e, wait
+#             )
+#             time.sleep(wait)
+
+#         # except json.JSONDecodeError as e:
+#         #     logger.error("Gemini returned invalid JSON: %s", e)
+#         #     raise ValueError(f"Gemini JSON parse error: {e}") from e
+#         except json.JSONDecodeError as e:
+#             print("\n========== BROKEN GEMINI RESPONSE ==========")
+#             print(raw)
+#             print("============================================\n")
+
+#     raise ValueError(
+#         f"Gemini JSON parse error: {e}"
+#     ) from e
+
+#     raise RuntimeError(f"Gemini API failed after {max_retries} attempts: {last_error}")
+
+
+def call_gemini(prompt: str, max_retries: int = 5):
+    last_error = None
 
     for attempt in range(max_retries):
         try:
-            time.sleep(random.uniform(0.5, 1.5))
 
             response = gemini_client.models.generate_content(
                 model=MODEL,
@@ -644,37 +691,26 @@ def call_gemini(prompt: str, max_retries: int = 5) -> dict:
             )
 
             raw = response.text.strip()
+
             if raw.startswith("```"):
                 raw = raw.strip("`")
                 if raw.lower().startswith("json"):
                     raw = raw[4:].strip()
 
-            parsed = json.loads(raw)
-            logger.debug("Gemini call successful on attempt %d", attempt + 1)
-            return parsed
+            return json.loads(raw)
 
-        except ServerError as e:
-            last_error = e
-            wait = 2 ** (attempt + 1) + random.uniform(0, 1)
-            logger.warning(
-                "Gemini ServerError (attempt %d): %s — retrying in %.1fs",
-                attempt + 1, e, wait
-            )
-            time.sleep(wait)
-
-        # except json.JSONDecodeError as e:
-        #     logger.error("Gemini returned invalid JSON: %s", e)
-        #     raise ValueError(f"Gemini JSON parse error: {e}") from e
-        except json.JSONDecodeError as e:
-            print("\n========== BROKEN GEMINI RESPONSE ==========")
+        except json.JSONDecodeError as err:
+            print("\n========== INVALID JSON ==========")
             print(raw)
-            print("============================================\n")
+            print("==================================")
+            raise ValueError(f"Gemini returned invalid JSON: {err}")
 
-    raise ValueError(
-        f"Gemini JSON parse error: {e}"
-    ) from e
+        except Exception as err:
+            last_error = err
+            print(err)
+            raise
 
-    raise RuntimeError(f"Gemini API failed after {max_retries} attempts: {last_error}")
+    raise RuntimeError(f"Gemini failed: {last_error}")
 
 
 # =========================

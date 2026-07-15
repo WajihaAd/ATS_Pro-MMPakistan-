@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import os
 import sys
+from datetime import timedelta
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -42,6 +43,11 @@ class Config:
     UPLOAD_TMP_DIR = BASE_DIR / "static" / "_tmp_uploads"
 
     JSONIFY_PRETTYPRINT_REGULAR = False
+
+    # --- Auth / session (used by routes/auth_routes.py) ---
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = "Lax"
+    PERMANENT_SESSION_LIFETIME = timedelta(days=7)
 
 
 Config.UPLOAD_TMP_DIR.mkdir(parents=True, exist_ok=True)
