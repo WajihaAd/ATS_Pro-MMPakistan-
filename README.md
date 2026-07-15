@@ -1,8 +1,8 @@
 # ATS_Pro-MMPakistan-
 AI-powered Applicant Tracking System (ATS) built with Flask, PostgreSQL, Gemini AI. Features intelligent resume parsing, semantic job description matching, deterministic ATS scoring, candidate ranking, duplicate detection, HR dashboards, PDF report generation, and a modern, responsive interface with a clean bright white theme and high-contrast design for an intuitive user experience.
-<img width="615" height="286" alt="image" src="https://github.com/user-attachments/assets/08276edc-9efa-43a3-aa37-584669ece675" />
-
 <img width="1920" height="891" alt="screencapture-192-168-1-130-5000-login-2026-07-15-10_53_36" src="https://github.com/user-attachments/assets/5a83d66e-5afb-4146-b7c4-01139a72020e" />
+
+<img width="1920" height="1158" alt="screencapture-192-168-1-130-5000-signup-2026-07-15-11_00_16" src="https://github.com/user-attachments/assets/5dfbfc3a-dc4a-4be2-9d25-386679c9882e" />
 
 <img width="1920" height="2287" alt="screencapture-127-0-0-1-5000-dashboard-2026-07-14-14_04_41" src="https://github.com/user-attachments/assets/ebe5953c-4eb5-45be-8daa-a4e0088655ce" />
 
