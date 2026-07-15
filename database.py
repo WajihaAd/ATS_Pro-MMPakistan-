@@ -20,6 +20,15 @@ _schema_ready = False
 
 
 def get_db_connection() -> psycopg.Connection:
+    # 1. Read the Supabase connection string from Render variables
+    conn_string = os.getenv("DATABASE_URL")
+    
+    if conn_string:
+        # Standardize prefix for older libraries just in case
+        if conn_string.startswith("postgres://"):
+            conn_string = conn_string.replace("postgres://", "postgresql://", 1)
+        return psycopg.connect(conn_string)
+
     return psycopg.connect(
         dbname="resume_db",
         user="postgres",
